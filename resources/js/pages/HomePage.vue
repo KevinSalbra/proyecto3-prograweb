@@ -2,19 +2,10 @@
     <section class="search-section">
         <form class="main-search flex align-items-center gap-3" @submit.prevent="loadHome(1)">
             <span class="search-icon">⌕</span>
-            <InputText
-                v-model="search"
-                class="flex-1"
-                placeholder="Buscar por nombre, productor, uva, país, región o año"
-            />
+            <InputText v-model="search" class="flex-1"
+                placeholder="Buscar por nombre, productor, uva, país, región o año" />
             <Button type="submit" label="Buscar" class="action-dark" />
-            <Button
-                v-if="search"
-                type="button"
-                label="Limpiar"
-                class="action-outline"
-                @click="clearSearch"
-            />
+            <Button v-if="search" type="button" label="Limpiar" class="action-outline" @click="clearSearch" />
         </form>
     </section>
 
@@ -24,13 +15,10 @@
             <h2>Productos destacados</h2>
         </div>
 
-        <div class="grid gap-4">
-            <ProductCard
-                v-for="product in featuredProducts"
-                :key="product.id"
-                :product="product"
-                class="col-12 md:col-6 xl:col-4"
-            />
+        <div class="grid">
+            <div v-for="product in featuredProducts" :key="product.id" class="col-12 md:col-6 lg:col-4">
+                <ProductCard :product="product" />
+            </div>
         </div>
     </section>
 
@@ -40,24 +28,17 @@
             <h2>{{ search ? `Resultados para “${search}”` : 'Últimos productos agregados' }}</h2>
         </div>
 
-        <div v-if="products.length" class="grid gap-4">
-            <ProductCard
-                v-for="product in products"
-                :key="product.id"
-                :product="product"
-                class="col-12 md:col-6 xl:col-4"
-            />
+        <div v-if="products.length" class="grid">
+            <div v-for="product in products" :key="product.id" class="col-12 md:col-6 lg:col-4">
+                <ProductCard :product="product" />
+            </div>
         </div>
 
         <div v-else class="empty-state">
             No se encontraron productos con ese criterio de búsqueda.
         </div>
 
-        <Pagination
-            v-if="meta"
-            :meta="meta"
-            @change="loadHome"
-        />
+        <Pagination v-if="meta" :meta="meta" @change="loadHome" />
     </section>
 
     <section class="section" id="categorias">
@@ -66,53 +47,60 @@
             <h2>Categorías del catálogo</h2>
         </div>
 
-        <div class="grid gap-4">
-            <RouterLink
-                v-for="category in categories"
-                :key="category.id"
-                :to="`/categorias/${category.slug}`"
-                class="col-12 md:col-6 lg:col-4 category-card"
-            >
-                <img
-                    v-if="category.image_url"
-                    :src="category.image_url"
-                    :alt="category.name"
-                    class="category-image"
-                >
+        <div class="grid">
+            <div v-for="category in categories" :key="category.id" class="col-12 md:col-6 lg:col-4">
+                <RouterLink :to="`/categorias/${category.slug}`" class="category-card">
+                    <img v-if="category.image_url" :src="category.image_url" :alt="category.name"
+                        class="category-image">
 
-                <span>{{ category.type }}</span>
-                <h3>{{ category.name }}</h3>
-                <p>{{ category.description }}</p>
-                <small>{{ category.products_count }} productos</small>
-            </RouterLink>
+                    <span>{{ category.type }}</span>
+                    <h3>{{ category.name }}</h3>
+                    <p>{{ category.description }}</p>
+                    <small>{{ category.products_count }} productos</small>
+                </RouterLink>
+            </div>
         </div>
     </section>
 
-    <section class="info-block" id="blog">
-        <div>
-            <p class="eyebrow">Blog</p>
-            <h2>Notas sobre vinos</h2>
-        </div>
-        <p>
-            El vino puede clasificarse por su tipo, uva, región, añada y método de elaboración.
-            Los vinos tintos suelen acompañar carnes, pastas y comidas con mayor intensidad;
-            los blancos se asocian con pescados, mariscos, quesos suaves y platos ligeros;
-            mientras que los rosados y champanes funcionan bien en aperitivos, celebraciones
-            y maridajes frescos.
-        </p>
+    <section class="section" id="blog">
+        <Card class="info-card">
+            <template #content>
+                <div class="info-content">
+                    <div>
+                        <p class="eyebrow">Blog</p>
+                        <h2>Notas sobre vinos</h2>
+                    </div>
+
+                    <p>
+                        El vino puede clasificarse por su tipo, uva, región, añada y método de elaboración.
+                        Los vinos tintos suelen acompañar carnes, pastas y comidas con mayor intensidad;
+                        los blancos se asocian con pescados, mariscos, quesos suaves y platos ligeros;
+                        mientras que los rosados y champanes funcionan bien en aperitivos, celebraciones
+                        y maridajes frescos.
+                    </p>
+                </div>
+            </template>
+        </Card>
     </section>
 
-    <section class="info-block" id="historia">
-        <div>
-            <p class="eyebrow">Historia</p>
-            <h2>Historia de González & Salazar</h2>
-        </div>
-        <p>
-            González & Salazar nace como una tienda costarricense especializada en vinos y
-            champanes seleccionados. Su propuesta se enfoca en ofrecer un catálogo organizado,
-            elegante y fácil de consultar, donde cada producto pueda identificarse por su
-            productor, país, región, uva, añada, precio y disponibilidad.
-        </p>
+    <section class="section" id="historia">
+        <Card class="info-card">
+            <template #content>
+                <div class="info-content">
+                    <div>
+                        <p class="eyebrow">Historia</p>
+                        <h2>Historia de González & Salazar</h2>
+                    </div>
+
+                    <p>
+                        González & Salazar nace como una tienda costarricense especializada en vinos y
+                        champanes seleccionados. Su propuesta se enfoca en ofrecer un catálogo organizado,
+                        elegante y fácil de consultar, donde cada producto pueda identificarse por su
+                        productor, país, región, uva, añada, precio y disponibilidad.
+                    </p>
+                </div>
+            </template>
+        </Card>
     </section>
 </template>
 

@@ -140,22 +140,26 @@ main {
 }
 
 .search-section {
-    background: var(--paper);
-    padding: 28px 20px;
+    max-width: 1280px;
+    margin: 32px auto 0;
+    padding: 0 24px;
 }
 
 .main-search {
-    width: min(1120px, 100%);
-    margin: 0 auto;
-    background: #faf9f7;
-    border: 1px solid var(--line);
-    border-radius: 7px;
-    padding: 14px 18px;
+    background: linear-gradient(
+        135deg,
+        #faf7f3 0%,
+        #f5f1eb 100%
+    );
+    border-radius: 28px;
+    padding: 20px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.06);
 }
 
 .search-icon {
-    color: var(--gold);
-    font-size: 28px;
+    font-size: 1.4rem;
+    color: #050404;
+    margin-left: 10px;
 }
 
 .breadcrumb {
@@ -171,30 +175,86 @@ main {
     font-size: 0.78rem;
 }
 
-.form-page {
-    max-width: 1180px;
+/* =========================
+   LOGIN
+========================= */
+
+.form-container {
+    max-width: 600px;
     margin: 0 auto;
-    padding: 54px 24px 70px;
+}
+
+.form-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.form-card label {
+    font-weight: 600;
+    color: #24324a;
+}
+
+.form-card .p-inputtext,
+.form-card .p-password-input {
+    width: 100%;
+    min-height: 54px;
+}
+
+.form-actions {
+    margin-top: 2rem;
+}
+
+.form-actions .p-button {
+    flex: 1;
+}
+
+.form-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 70px 24px;
 }
 
 .form-header {
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 2rem;
+}
+
+.form-header h1 {
+    margin-bottom: 0.75rem;
+}
+
+.form-header > p:last-child {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .form-header h1 {
     margin: 10px 0;
 }
 
-.form-card {
-    background: var(--paper);
-    border: 1px solid var(--line);
-    box-shadow: var(--shadow);
-    padding: 28px;
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-header h1 {
+    margin-bottom: 0.75rem;
+}
+
+.form-header > p:last-child {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .form-actions {
-    margin-top: 28px;
+    margin-top: 2rem;
+}
+
+.form-actions .p-button {
+    flex: 1;
 }
 
 .catalog-header {
@@ -569,7 +629,7 @@ main {
 .p-button.action-dark.p-button-link {
     background: var(--text);
     border-color: var(--text);
-    color: #ffffff;
+    color: #0f0e0e;
 }
 
 .p-button.action-light,
@@ -768,4 +828,30 @@ main {
     .product-detail-info h1 {
         font-size: clamp(2.5rem, 12vw, 4rem);
     }
+}
+
+.info-card {
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+    transition: transf  orm .25s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-4px);
+}
+
+.info-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-content p {
+    margin: 0;
+    line-height: 1.8;
+    color: #5f5f5f;
+    font-size: 1rem;
 }
