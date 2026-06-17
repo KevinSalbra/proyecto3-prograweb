@@ -10,7 +10,7 @@
         <p>Explore los productos disponibles mediante categorías, búsqueda y ordenamiento.</p>
     </section>
 
-    <section class="grid align-items-start gap-4 catalog-layout">
+    <section class="section grid align-items-start gap-4 catalog-layout">
         <aside class="filters col-12 lg:col-3">
             <h2>Filtros</h2>
 
@@ -19,21 +19,11 @@
                 <InputText v-model="search" placeholder="Nombre, productor, región..." />
 
                 <label>Categoría</label>
-                <Select
-                    v-model="categoryId"
-                    :options="categoryOptions"
-                    optionLabel="label"
-                    optionValue="id"
-                    placeholder="Todas"
-                />
+                <Select v-model="categoryId" :options="categoryOptions" optionLabel="label" optionValue="id"
+                    placeholder="Todas" />
 
                 <label>Ordenar por</label>
-                <Select
-                    v-model="sort"
-                    :options="sortOptions"
-                    optionLabel="label"
-                    optionValue="value"
-                />
+                <Select v-model="sort" :options="sortOptions" optionLabel="label" optionValue="value" />
 
                 <Button type="submit" label="Aplicar filtros" class="action-dark full" />
             </form>
@@ -42,32 +32,19 @@
         <section class="catalog-content col-12 lg:col-9">
             <div class="catalog-tools flex justify-content-between align-items-center gap-3 flex-wrap">
                 <span>{{ meta?.total || 0 }} productos encontrados</span>
-                <Button
-                    type="button"
-                    label="Agregar producto"
-                    class="action-light"
-                    @click="router.push('/productos/crear')"
-                />
+                <Button type="button" label="Agregar producto" class="action-light"
+                    @click="router.push('/productos/crear')" />
             </div>
 
-            <div v-if="products.length" class="grid gap-4">
-                <ProductCard
-                    v-for="product in products"
-                    :key="product.id"
-                    :product="product"
-                    class="col-12 md:col-6 xl:col-4"
-                />
+            <div v-if="products.length" class="products-grid">
+                <ProductCard v-for="product in products" :key="product.id" :product="product" />
             </div>
 
             <div v-else class="empty-state">
                 No hay productos para mostrar.
             </div>
 
-            <Pagination
-                v-if="meta"
-                :meta="meta"
-                @change="loadProducts"
-            />
+            <Pagination v-if="meta" :meta="meta" @change="loadProducts" />
         </section>
     </section>
 </template>
