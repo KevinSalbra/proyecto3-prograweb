@@ -12,18 +12,20 @@ Route::prefix('api')->group(function () {
 
     Route::get('/categories', [CategoryApiController::class, 'index']);
     Route::get('/categories/type/{type}', [CategoryApiController::class, 'byType']);
-    Route::get('/categories/{category:slug}', [CategoryApiController::class, 'show']);
+    Route::get('/categories/{category}', [CategoryApiController::class, 'show']);
 
     Route::get('/products', [ProductApiController::class, 'index']);
     Route::post('/products', [ProductApiController::class, 'store']);
-    Route::get('/products/{product:slug}', [ProductApiController::class, 'show']);
-    Route::post('/products/{product:slug}', [ProductApiController::class, 'update']);
-    Route::delete('/products/{product:slug}', [ProductApiController::class, 'destroy']);
+    Route::get('/products/{product}', [ProductApiController::class, 'show']);
+    Route::put('/products/{product}', [ProductApiController::class, 'update']);
+    Route::patch('/products/{product}', [ProductApiController::class, 'update']);
+    Route::post('/products/{product}', [ProductApiController::class, 'update']);
+    Route::delete('/products/{product}', [ProductApiController::class, 'destroy']);
 
     Route::get('/cart', [CartApiController::class, 'index']);
-    Route::post('/cart/{product:slug}', [CartApiController::class, 'store']);
+    Route::post('/cart/{product}', [CartApiController::class, 'store']);
     Route::put('/cart', [CartApiController::class, 'update']);
-    Route::delete('/cart/{product:slug}', [CartApiController::class, 'destroy']);
+    Route::delete('/cart/{product}', [CartApiController::class, 'destroy']);
     Route::delete('/cart', [CartApiController::class, 'clear']);
 
     Route::get('/checkout', [CheckoutApiController::class, 'index']);
@@ -31,7 +33,6 @@ Route::prefix('api')->group(function () {
     Route::get('/checkout/success', [CheckoutApiController::class, 'success']);
 });
 
-Route::get('/', fn () => view('app'));
-
-Route::get('/{any}', fn () => view('app'))
-    ->where('any', '^(?!api).*$');
+Route::get('/{any?}', function () {
+    return view('app');
+})->where('any', '.*');

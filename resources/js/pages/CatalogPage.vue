@@ -10,8 +10,8 @@
         <p>Consulte, registre y actualice los productos disponibles en González & Salazar.</p>
     </section>
 
-    <section class="grid align-items-start gap-4 catalog-layout">
-        <aside class="filters col-12 lg:col-3">
+    <section class="catalog-page-layout">
+        <aside class="filters">
             <h2>Búsqueda</h2>
 
             <form class="flex flex-column gap-3" @submit.prevent="loadProducts(1)">
@@ -40,9 +40,10 @@
             </form>
         </aside>
 
-        <section class="catalog-content col-12 lg:col-9">
-            <div class="catalog-tools flex justify-content-between align-items-center gap-3 flex-wrap">
+        <section class="catalog-content">
+            <div class="catalog-tools">
                 <span>{{ meta?.total || 0 }} productos registrados</span>
+
                 <Button
                     type="button"
                     label="Agregar producto"
@@ -57,7 +58,7 @@
                 class="admin-table-wrapper"
                 responsiveLayout="scroll"
             >
-                <Column header="Imagen">
+                <Column header="Imagen" style="width: 115px">
                     <template #body="{ data }">
                         <img
                             :src="data.image_url"
@@ -67,47 +68,51 @@
                     </template>
                 </Column>
 
-                <Column header="Producto">
+                <Column header="Producto" style="min-width: 230px">
                     <template #body="{ data }">
-                        <strong>{{ data.name }}</strong>
-                        <span>{{ data.producer }}</span>
+                        <div class="admin-product-info">
+                            <strong>{{ data.name }}</strong>
+                            <span>{{ data.producer }}</span>
+                        </div>
                     </template>
                 </Column>
 
-                <Column header="Categoría">
+                <Column header="Categoría" style="width: 150px">
                     <template #body="{ data }">
                         {{ data.category?.name }}
                     </template>
                 </Column>
 
-                <Column header="Precio" class="nowrap">
+                <Column header="Precio" style="width: 130px">
                     <template #body="{ data }">
                         ₡ {{ formatPrice(data.price) }}
                     </template>
                 </Column>
 
-                <Column header="Stock">
+                <Column header="Stock" style="width: 90px">
                     <template #body="{ data }">
                         {{ data.stock }}
                     </template>
                 </Column>
 
-                <Column header="Acciones">
+                <Column header="Acciones" style="width: 170px">
                     <template #body="{ data }">
-                        <div class="action-buttons catalog-actions">
+                        <div class="catalog-actions">
                             <Button
                                 label="Ver"
-                                class="action-outline"
+                                class="action-outline compact-button"
                                 @click="router.push(`/productos/${data.slug}`)"
                             />
+
                             <Button
                                 label="Editar"
-                                class="action-outline"
+                                class="action-outline compact-button"
                                 @click="router.push(`/productos/${data.slug}/editar`)"
                             />
+
                             <Button
                                 label="Eliminar"
-                                class="action-outline"
+                                class="action-outline compact-button danger-button"
                                 @click="deleteProduct(data)"
                             />
                         </div>
@@ -131,9 +136,9 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useConfirm } from 'primevue/useconfirm';
 import api from '../services/api';
 import Pagination from '../components/Pagination.vue';
-import { useConfirm } from 'primevue/useconfirm';
 
 const search = ref('');
 const categoryId = ref('');
@@ -141,6 +146,7 @@ const sort = ref('recientes');
 const categories = ref([]);
 const products = ref([]);
 const meta = ref(null);
+
 const confirm = useConfirm();
 const router = useRouter();
 

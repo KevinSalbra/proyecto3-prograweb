@@ -19,32 +19,58 @@
                 <InputText v-model="search" placeholder="Nombre, productor, región..." />
 
                 <label>Categoría</label>
-                <Select v-model="categoryId" :options="categoryOptions" optionLabel="label" optionValue="id"
-                    placeholder="Todas" />
+                <Select
+                    v-model="categoryId"
+                    :options="categoryOptions"
+                    optionLabel="label"
+                    optionValue="id"
+                    placeholder="Todas"
+                />
 
                 <label>Ordenar por</label>
-                <Select v-model="sort" :options="sortOptions" optionLabel="label" optionValue="value" />
+                <Select
+                    v-model="sort"
+                    :options="sortOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                />
 
                 <Button type="submit" label="Aplicar filtros" class="action-dark full" />
+                <Button type="button" label="Limpiar" class="action-outline full" @click="clearFilters" />
             </form>
         </aside>
 
         <section class="catalog-content col-12 lg:col-9">
             <div class="catalog-tools flex justify-content-between align-items-center gap-3 flex-wrap">
                 <span>{{ meta?.total || 0 }} productos encontrados</span>
-                <Button type="button" label="Agregar producto" class="action-light"
-                    @click="router.push('/productos/crear')" />
+
+                <Button
+                    type="button"
+                    label="Agregar producto"
+                    class="action-light"
+                    @click="router.push('/productos/crear')"
+                />
             </div>
 
-            <div v-if="products.length" class="products-grid">
-                <ProductCard v-for="product in products" :key="product.id" :product="product" />
+            <div v-if="products.length" class="grid">
+                <div
+                    v-for="product in products"
+                    :key="product.id"
+                    class="col-12 md:col-6 xl:col-4"
+                >
+                    <ProductCard :product="product" />
+                </div>
             </div>
 
             <div v-else class="empty-state">
                 No hay productos para mostrar.
             </div>
 
-            <Pagination v-if="meta" :meta="meta" @change="loadProducts" />
+            <Pagination
+                v-if="meta"
+                :meta="meta"
+                @change="loadProducts"
+            />
         </section>
     </section>
 </template>
@@ -94,10 +120,7 @@ onMounted(() => {
 watch(
     () => props.type,
     () => {
-        search.value = '';
-        sort.value = 'recientes';
-        categoryId.value = '';
-        loadProducts(1);
+        clearFilters();
     }
 );
 
@@ -115,5 +138,12 @@ async function loadProducts(page = 1) {
     categories.value = response.data.categories;
     products.value = response.data.products.data;
     meta.value = response.data.products.meta;
+}
+
+function clearFilters() {
+    search.value = '';
+    sort.value = 'recientes';
+    categoryId.value = '';
+    loadProducts(1);
 }
 </script>

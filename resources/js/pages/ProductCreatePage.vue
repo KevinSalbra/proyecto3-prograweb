@@ -50,6 +50,10 @@ async function storeProduct(formData, errors) {
         router.push(`/productos/${response.data.product.slug}`);
     } catch (error) {
         errors.value = Object.values(error.response?.data?.errors || {}).flat();
+
+        if (!errors.value.length && error.response?.data?.message) {
+            errors.value = [error.response.data.message];
+        }
     }
 }
 </script>

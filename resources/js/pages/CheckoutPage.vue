@@ -13,7 +13,7 @@
             <p>Ingrese sus datos de entrega y seleccione el método de pago para completar su pedido.</p>
         </div>
 
-        <form class="form-card" @submit.prevent="submitCheckout">
+        <form class="form-card checkout-form" @submit.prevent="submitCheckout">
             <Message
                 v-for="error in errors"
                 :key="error"
@@ -57,7 +57,7 @@
 
             <div class="form-section-title">
                 <h2>Información de pago</h2>
-                <p>Seleccione el método de pago y complete los datos requeridos para procesar el pedido.</p>
+                <p>Complete los datos requeridos para registrar el pedido.</p>
             </div>
 
             <div class="grid">
@@ -74,17 +74,31 @@
 
                 <div class="col-12 md:col-6 flex flex-column gap-2">
                     <label>Número de tarjeta</label>
-                    <InputText v-model="form.card_number" required />
+                    <InputText
+                        v-model="form.card_number"
+                        maxlength="19"
+                        required
+                    />
                 </div>
 
                 <div class="col-12 md:col-6 flex flex-column gap-2">
                     <label>Fecha de expiración</label>
-                    <InputText v-model="form.expiry_date" placeholder="MM/AA" required />
+                    <InputText
+                        :modelValue="form.expiry_date"
+                        placeholder="MM/AA"
+                        maxlength="5"
+                        required
+                        @update:modelValue="formatExpiryDate"
+                    />
                 </div>
 
                 <div class="col-12 md:col-6 flex flex-column gap-2">
                     <label>CVV</label>
-                    <InputText v-model="form.cvv" required />
+                    <InputText
+                        v-model="form.cvv"
+                        maxlength="4"
+                        required
+                    />
                 </div>
             </div>
 
@@ -103,13 +117,14 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../services/api';
 import { cartStore } from '../services/cartStore';
 
 const router = useRouter();
 const errors = ref([]);
+
 const paymentMethods = [
     { label: 'Tarjeta de crédito', value: 'Tarjeta de crédito' },
     { label: 'Tarjeta de débito', value: 'Tarjeta de débito' },
@@ -127,6 +142,24 @@ const form = reactive({
     expiry_date: '',
     cvv: '',
 });
+
+onMounted(async () => {
+    await cartStore.load();
+
+    if (!cartStore.count) {
+        router.push('/carrito');
+    }
+});
+
+function formatExpiryDate(value) {
+    let cleanValue = String(value || '').replace(/\D/g, '').slice(0, 4);
+
+    if (cleanValue.length >= 3) {
+        cleanValue = `${cleanValue.slice(0, 2)}/${cleanValue.slice(2)}`;
+    }
+
+    form.expiry_date = cleanValue;
+}
 
 async function submitCheckout() {
     errors.value = [];

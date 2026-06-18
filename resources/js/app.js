@@ -1,4 +1,5 @@
-import './bootstrap';
+import './axios-setup';
+
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 import './styles/primevue-overrides.css';
@@ -6,6 +7,7 @@ import './styles/primevue-overrides.css';
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
+
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
 
@@ -20,8 +22,8 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 import Paginator from 'primevue/paginator';
-import Select from 'primevue/select';
 import Password from 'primevue/password';
+import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
 import Toast from 'primevue/toast';
 
@@ -31,13 +33,18 @@ import App from './App.vue';
 const app = createApp(App);
 
 app.use(router);
+
 app.use(PrimeVue, {
     ripple: true,
     inputVariant: 'outlined',
     theme: {
         preset: Aura,
+        options: {
+            darkModeSelector: false,
+        },
     },
 });
+
 app.use(ConfirmationService);
 app.use(ToastService);
 
@@ -52,8 +59,8 @@ app.component('InputNumber', InputNumber);
 app.component('InputText', InputText);
 app.component('Message', Message);
 app.component('Paginator', Paginator);
-app.component('Select', Select);
 app.component('Password', Password);
+app.component('Select', Select);
 app.component('Textarea', Textarea);
 app.component('Toast', Toast);
 

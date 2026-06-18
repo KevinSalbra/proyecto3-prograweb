@@ -51,6 +51,8 @@ async function loadData() {
 
 async function updateProduct(formData, errors) {
     try {
+        formData.append('_method', 'PUT');
+
         const response = await api.post(`/products/${route.params.slug}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -60,6 +62,10 @@ async function updateProduct(formData, errors) {
         router.push(`/productos/${response.data.product.slug}`);
     } catch (error) {
         errors.value = Object.values(error.response?.data?.errors || {}).flat();
+
+        if (!errors.value.length && error.response?.data?.message) {
+            errors.value = [error.response.data.message];
+        }
     }
 }
 </script>

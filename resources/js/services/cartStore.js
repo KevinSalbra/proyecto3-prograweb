@@ -57,8 +57,8 @@ export const cartStore = reactive({
 
     apply(cart) {
         this.items = cart.items || [];
-        this.subtotal = cart.subtotal || 0;
-        this.total = cart.total || 0;
-        this.count = cart.count || 0;
+        this.subtotal = Number(cart.subtotal || 0);
+        this.total = Number(cart.total || 0);
+        this.count = Number(cart.count || 0);
     },
 });

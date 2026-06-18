@@ -1,36 +1,44 @@
 <template>
-    <section class="section">
+    <section class="checkout-success-page">
         <Card v-if="order" class="success-card">
             <template #content>
-                <p class="eyebrow">Compra registrada</p>
-                <h1>Gracias por su compra</h1>
+                <div class="success-content">
+                    <p class="eyebrow">Compra registrada</p>
 
-                <p>
-                    Código de confirmación:
-                    <strong>{{ order.confirmation }}</strong>
-                </p>
+                    <h1>Gracias por su compra</h1>
 
-                <p>Fecha: {{ order.placed_at }}</p>
+                    <div class="success-meta">
+                        <p>
+                            Código de confirmación:
+                            <strong>{{ order.confirmation }}</strong>
+                        </p>
 
-                <h2>Resumen</h2>
+                        <p>
+                            Fecha:
+                            <strong>{{ order.placed_at }}</strong>
+                        </p>
+                    </div>
 
-                <ul class="order-list">
-                    <li v-for="item in order.items" :key="item.name">
-                        {{ item.quantity }} × {{ item.name }}
-                        <strong>₡ {{ formatPrice(item.subtotal) }}</strong>
-                    </li>
-                </ul>
+                    <h2>Resumen de la compra</h2>
 
-                <p class="detail-price">
-                    Total: ₡ {{ formatPrice(order.total) }}
-                </p>
+                    <ul class="order-list">
+                        <li v-for="item in order.items" :key="item.name">
+                            <span>{{ item.quantity }} × {{ item.name }}</span>
+                            <strong>₡ {{ formatPrice(item.subtotal) }}</strong>
+                        </li>
+                    </ul>
 
-                <Button
-                    type="button"
-                    label="Volver al inicio"
-                    class="action-dark"
-                    @click="router.push('/')"
-                />
+                    <p class="success-total">
+                        Total: ₡ {{ formatPrice(order.total) }}
+                    </p>
+
+                    <Button
+                        type="button"
+                        label="Volver al inicio"
+                        class="action-dark"
+                        @click="router.push('/')"
+                    />
+                </div>
             </template>
         </Card>
 

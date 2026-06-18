@@ -27,9 +27,7 @@
 
                 <div class="grid">
                     <div class="col-12 flex flex-column gap-2">
-                        <label for="email">
-                            Correo electrónico
-                        </label>
+                        <label for="email">Correo electrónico</label>
 
                         <InputText
                             id="email"
@@ -41,9 +39,7 @@
                     </div>
 
                     <div class="col-12 flex flex-column gap-2">
-                        <label for="password">
-                            Contraseña
-                        </label>
+                        <label for="password">Contraseña</label>
 
                         <Password
                             id="password"

@@ -10,16 +10,16 @@
         <p>Revise sus productos seleccionados antes de continuar con el pago.</p>
     </section>
 
-    <section class="section">
-        <div v-if="visibleItems.length" class="grid align-items-start gap-4 cart-layout">
+    <section class="cart-page">
+        <div v-if="visibleItems.length" class="cart-page-layout">
             <DataTable
                 :value="visibleItems"
-                class="col-12 lg:col-8 admin-table-wrapper"
+                class="cart-table"
                 responsiveLayout="scroll"
             >
-                <Column header="Producto">
+                <Column header="Producto" style="min-width: 260px">
                     <template #body="{ data }">
-                        <div class="flex align-items-center gap-3">
+                        <div class="cart-product-info">
                             <img
                                 :src="data.product.image_url"
                                 :alt="data.product.name"
@@ -34,13 +34,13 @@
                     </template>
                 </Column>
 
-                <Column header="Precio" class="nowrap">
+                <Column header="Precio" style="width: 140px">
                     <template #body="{ data }">
                         ₡ {{ formatPrice(data.unit_price) }}
                     </template>
                 </Column>
 
-                <Column header="Cantidad">
+                <Column header="Cantidad" style="width: 150px">
                     <template #body="{ data }">
                         <InputNumber
                             :modelValue="data.displayQuantity"
@@ -53,37 +53,35 @@
                     </template>
                 </Column>
 
-                <Column header="Subtotal" class="nowrap">
+                <Column header="Subtotal" style="width: 150px">
                     <template #body="{ data }">
                         ₡ {{ formatPrice(data.displaySubtotal) }}
                     </template>
                 </Column>
 
-                <Column header="Acción">
+                <Column header="Acción" style="width: 160px">
                     <template #body="{ data }">
-                        <div class="flex gap-2 flex-wrap">
-                            <Button
-                                label="Eliminar"
-                                class="action-outline"
-                                @click="removeItem(data.product)"
-                            />
-                        </div>
+                        <Button
+                            label="Eliminar"
+                            class="action-outline compact-button"
+                            @click="removeItem(data.product)"
+                        />
                     </template>
                 </Column>
             </DataTable>
 
-            <aside class="cart-summary col-12 lg:col-4">
+            <aside class="cart-summary">
                 <h2>Resumen</h2>
 
-                <p>
-                    Subtotal:
+                <div class="summary-row">
+                    <span>Subtotal</span>
                     <strong>₡ {{ formatPrice(previewSubtotal) }}</strong>
-                </p>
+                </div>
 
-                <p>
-                    Total:
+                <div class="summary-row total-row">
+                    <span>Total</span>
                     <strong>₡ {{ formatPrice(previewTotal) }}</strong>
-                </p>
+                </div>
 
                 <p v-if="isSaving" class="cart-status">
                     Actualizando carrito...
@@ -153,9 +151,7 @@ function setQuantity(productId, value, stock) {
         return;
     }
 
-    const safeQuantity = Math.max(0, Math.min(numericValue, Number(stock)));
-
-    draftQuantities[productId] = safeQuantity;
+    draftQuantities[productId] = Math.max(0, Math.min(numericValue, Number(stock)));
 
     scheduleCartUpdate();
 }

@@ -18,7 +18,7 @@
                     class="action-outline"
                     @click="goTo('/login')"
                 />
-                <span>Español</span>
+
                 <Button
                     :label="`Carrito (${cartStore.count})`"
                     text
@@ -60,17 +60,16 @@
 
         <div>
             <h4>Enlaces útiles</h4>
-            <RouterLink to="/">Últimos productos</RouterLink>
+            <RouterLink to="/">Inicio</RouterLink>
             <RouterLink to="/vino">Vino</RouterLink>
             <RouterLink to="/champan">Champán</RouterLink>
-            <RouterLink to="/productos">Administrar catálogo</RouterLink>
+            <RouterLink to="/productos">Catálogo</RouterLink>
         </div>
 
         <div>
-            <h4>Soporte</h4>
-            <p>Contacto</p>
-            <p>Preguntas frecuentes</p>
-            <p>Políticas del sitio</p>
+            <h4>Contacto</h4>
+            <p>contacto@gonzalezsalazar.cr</p>
+            <p>Instagram · Facebook · X</p>
         </div>
     </footer>
 </template>

@@ -2,10 +2,22 @@
     <section class="search-section">
         <form class="main-search flex align-items-center gap-3" @submit.prevent="loadHome(1)">
             <span class="search-icon">⌕</span>
-            <InputText v-model="search" class="flex-1"
-                placeholder="Buscar por nombre, productor, uva, país, región o año" />
+
+            <InputText
+                v-model="search"
+                class="flex-1"
+                placeholder="Buscar por nombre, productor, uva, país, región o año"
+            />
+
             <Button type="submit" label="Buscar" class="action-dark" />
-            <Button v-if="search" type="button" label="Limpiar" class="action-outline" @click="clearSearch" />
+
+            <Button
+                v-if="search"
+                type="button"
+                label="Limpiar"
+                class="action-outline"
+                @click="clearSearch"
+            />
         </form>
     </section>
 
@@ -16,20 +28,28 @@
         </div>
 
         <div class="grid">
-            <div v-for="product in featuredProducts" :key="product.id" class="col-12 md:col-6 lg:col-4">
+            <div
+                v-for="product in featuredProducts"
+                :key="product.id"
+                class="col-12 md:col-6 lg:col-4"
+            >
                 <ProductCard :product="product" />
             </div>
         </div>
     </section>
 
-    <section class="section" id="ultimos">
+    <section class="section">
         <div class="section-header">
             <p class="eyebrow">Catálogo</p>
             <h2>{{ search ? `Resultados para “${search}”` : 'Últimos productos agregados' }}</h2>
         </div>
 
         <div v-if="products.length" class="grid">
-            <div v-for="product in products" :key="product.id" class="col-12 md:col-6 lg:col-4">
+            <div
+                v-for="product in products"
+                :key="product.id"
+                class="col-12 md:col-6 lg:col-4"
+            >
                 <ProductCard :product="product" />
             </div>
         </div>
@@ -38,20 +58,32 @@
             No se encontraron productos con ese criterio de búsqueda.
         </div>
 
-        <Pagination v-if="meta" :meta="meta" @change="loadHome" />
+        <Pagination
+            v-if="meta"
+            :meta="meta"
+            @change="loadHome"
+        />
     </section>
 
-    <section class="section" id="categorias">
+    <section class="section">
         <div class="section-header">
             <p class="eyebrow">Exploración</p>
             <h2>Categorías del catálogo</h2>
         </div>
 
         <div class="grid">
-            <div v-for="category in categories" :key="category.id" class="col-12 md:col-6 lg:col-4">
+            <div
+                v-for="category in categories"
+                :key="category.id"
+                class="col-12 md:col-6 lg:col-4"
+            >
                 <RouterLink :to="`/categorias/${category.slug}`" class="category-card">
-                    <img v-if="category.image_url" :src="category.image_url" :alt="category.name"
-                        class="category-image">
+                    <img
+                        v-if="category.image_url"
+                        :src="category.image_url"
+                        :alt="category.name"
+                        class="category-image"
+                    >
 
                     <span>{{ category.type }}</span>
                     <h3>{{ category.name }}</h3>
@@ -62,7 +94,7 @@
         </div>
     </section>
 
-    <section class="section" id="blog">
+    <section class="section">
         <Card class="info-card">
             <template #content>
                 <div class="info-content">
@@ -83,7 +115,7 @@
         </Card>
     </section>
 
-    <section class="section" id="historia">
+    <section class="section">
         <Card class="info-card">
             <template #content>
                 <div class="info-content">

@@ -1,5 +1,5 @@
 <template>
-    <form class="form-card" @submit.prevent="submit">
+    <form class="form-card" @submit.prevent="submitForm">
         <Message
             v-for="error in errors"
             :key="error"
@@ -8,6 +8,11 @@
         >
             {{ error }}
         </Message>
+
+        <div class="form-section-title">
+            <h2>Información principal</h2>
+            <p>Ingrese los datos básicos del producto.</p>
+        </div>
 
         <div class="grid">
             <div class="col-12 md:col-6 flex flex-column gap-2">
@@ -18,11 +23,12 @@
                     optionLabel="label"
                     optionValue="id"
                     placeholder="Seleccione una categoría"
+                    required
                 />
             </div>
 
             <div class="col-12 md:col-6 flex flex-column gap-2">
-                <label>Nombre del producto</label>
+                <label>Nombre</label>
                 <InputText v-model="form.name" required />
             </div>
 
@@ -32,40 +38,59 @@
             </div>
 
             <div class="col-12 md:col-6 flex flex-column gap-2">
-                <label>Imagen del producto</label>
-                <FileUpload
-                    mode="basic"
-                    accept="image/png,image/jpeg,image/jpg,image/webp"
-                    chooseLabel="Seleccionar imagen"
-                    customUpload
-                    @select="selectImage"
+                <label>Precio</label>
+                <InputNumber
+                    v-model="form.price"
+                    mode="decimal"
+                    :min="0"
+                    :minFractionDigits="2"
+                    :maxFractionDigits="2"
+                    required
                 />
-                <small>Formatos permitidos: jpg, jpeg, png o webp.</small>
             </div>
 
             <div class="col-12 flex flex-column gap-2">
                 <label>Descripción</label>
-                <Textarea v-model="form.description" rows="5" autoResize required />
+                <Textarea
+                    v-model="form.description"
+                    rows="5"
+                    autoResize
+                    required
+                />
             </div>
+        </div>
 
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-                <label>Precio</label>
-                <InputNumber v-model="form.price" mode="decimal" :min="0" :minFractionDigits="2" :maxFractionDigits="2" />
-            </div>
+        <div class="form-section-title">
+            <h2>Características</h2>
+            <p>Complete la información técnica del vino o champán.</p>
+        </div>
 
-            <div class="col-12 md:col-6 flex flex-column gap-2">
+        <div class="grid">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
                 <label>Tipo</label>
-                <Select v-model="form.wine_type" :options="wineTypeOptions" optionLabel="label" optionValue="value" />
+                <Select
+                    v-model="form.wine_type"
+                    :options="wineTypes"
+                    optionLabel="label"
+                    optionValue="value"
+                    required
+                />
             </div>
 
-            <div class="col-12 md:col-6 flex flex-column gap-2">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
                 <label>Uva</label>
                 <InputText v-model="form.grape" required />
             </div>
 
-            <div class="col-12 md:col-6 flex flex-column gap-2">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
                 <label>País</label>
-                <Select v-model="form.country" :options="countryOptions" optionLabel="label" optionValue="value" />
+                <Select
+                    v-model="form.country"
+                    :options="countries"
+                    optionLabel="label"
+                    optionValue="value"
+                    required
+                />
             </div>
 
             <div class="col-12 md:col-6 flex flex-column gap-2">
@@ -78,40 +103,82 @@
                 <InputText v-model="form.appellation" />
             </div>
 
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-                <label>Año / añada</label>
-                <InputNumber v-model="form.vintage_year" :min="1900" :max="2035" />
+            <div class="col-12 md:col-4 flex flex-column gap-2">
+                <label>Añada</label>
+                <InputNumber
+                    v-model="form.vintage_year"
+                    :useGrouping="false"
+                    :min="1900"
+                    :max="2035"
+                />
             </div>
 
-            <div class="col-12 md:col-6 flex flex-column gap-2">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
                 <label>Volumen</label>
-                <Select v-model="form.volume_ml" :options="volumeOptions" optionLabel="label" optionValue="value" />
+                <Select
+                    v-model="form.volume_ml"
+                    :options="volumes"
+                    optionLabel="label"
+                    optionValue="value"
+                    required
+                />
             </div>
 
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-                <label>Alcohol %</label>
+            <div class="col-12 md:col-4 flex flex-column gap-2">
+                <label>Alcohol</label>
                 <InputNumber
                     v-model="form.alcohol_percentage"
                     mode="decimal"
+                    suffix="%"
                     :min="5"
                     :max="20"
                     :minFractionDigits="1"
                     :maxFractionDigits="1"
+                    required
+                />
+            </div>
+        </div>
+
+        <div class="form-section-title">
+            <h2>Inventario e imagen</h2>
+            <p>Defina la disponibilidad, valoración e imagen del producto.</p>
+        </div>
+
+        <div class="grid">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
+                <label>Stock</label>
+                <InputNumber
+                    v-model="form.stock"
+                    :useGrouping="false"
+                    :min="0"
+                    :max="999"
+                    required
                 />
             </div>
 
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-                <label>Stock</label>
-                <InputNumber v-model="form.stock" :min="0" :max="999" />
-            </div>
-
-            <div class="col-12 md:col-6 flex flex-column gap-2">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
                 <label>Condición</label>
-                <Select v-model="form.condition" :options="conditionOptions" optionLabel="label" optionValue="value" />
+                <Select
+                    v-model="form.condition"
+                    :options="conditions"
+                    optionLabel="label"
+                    optionValue="value"
+                    required
+                />
+            </div>
+
+            <div class="col-12 md:col-4 flex align-items-center gap-3 pt-4">
+                <Checkbox
+                    v-model="form.is_featured"
+                    inputId="is_featured"
+                    binary
+                />
+
+                <label for="is_featured">Producto destacado</label>
             </div>
 
             <div class="col-12 md:col-6 flex flex-column gap-2">
-                <label>Fuente de reseña</label>
+                <label>Fuente de calificación</label>
                 <InputText v-model="form.rating_source" />
             </div>
 
@@ -127,16 +194,33 @@
                 />
             </div>
 
-            <div class="col-12 flex align-items-center gap-2">
-                <label class="flex align-items-center gap-2 m-0">
-                    <Checkbox v-model="form.is_featured" binary />
-                    <span>Mostrar como producto destacado</span>
-                </label>
+            <div class="col-12 flex flex-column gap-2">
+                <label>Imagen</label>
+
+                <FileUpload
+                    mode="basic"
+                    accept="image/*"
+                    chooseLabel="Seleccionar imagen"
+                    :auto="false"
+                    customUpload
+                    @select="onImageSelect"
+                />
+
+                <small v-if="product?.image_url">
+                    Imagen actual:
+                    <a :href="product.image_url" target="_blank">
+                        ver imagen
+                    </a>
+                </small>
             </div>
         </div>
 
         <div class="form-actions flex flex-wrap gap-3">
-            <Button type="submit" :label="submitLabel" class="action-dark" />
+            <Button
+                type="submit"
+                :label="submitLabel"
+                class="action-dark"
+            />
 
             <Button
                 type="button"
@@ -149,7 +233,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, watch, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
@@ -163,29 +247,50 @@ const props = defineProps({
     },
     submitLabel: {
         type: String,
-        default: 'Guardar producto',
+        default: 'Guardar',
     },
 });
 
 const emit = defineEmits(['submit']);
-
-const errors = ref([]);
 const router = useRouter();
+const errors = ref([]);
+const selectedImage = ref(null);
+
+const form = reactive({
+    category_id: '',
+    name: '',
+    producer: '',
+    description: '',
+    price: 0,
+    wine_type: 'Tinto',
+    grape: '',
+    country: 'Francia',
+    region: '',
+    appellation: '',
+    vintage_year: null,
+    volume_ml: 750,
+    alcohol_percentage: 12.0,
+    stock: 0,
+    condition: 'Excelente',
+    rating_source: '',
+    rating_score: null,
+    is_featured: false,
+});
 
 const categoryOptions = computed(() => {
     return props.categories.map((category) => ({
-        ...category,
+        id: category.id,
         label: `${category.type} - ${category.name}`,
     }));
 });
 
-const wineTypeOptions = [
+const wineTypes = [
     { label: 'Tinto', value: 'Tinto' },
     { label: 'Blanco', value: 'Blanco' },
     { label: 'Rosado', value: 'Rosado' },
 ];
 
-const countryOptions = [
+const countries = [
     { label: 'Francia', value: 'Francia' },
     { label: 'Chile', value: 'Chile' },
     { label: 'Argentina', value: 'Argentina' },
@@ -196,99 +301,76 @@ const countryOptions = [
     { label: 'Australia', value: 'Australia' },
 ];
 
-const volumeOptions = [
+const volumes = [
     { label: '375 ml', value: 375 },
     { label: '750 ml', value: 750 },
     { label: '1500 ml', value: 1500 },
 ];
 
-const conditionOptions = [
+const conditions = [
     { label: 'Excelente', value: 'Excelente' },
     { label: 'Muy bueno', value: 'Muy bueno' },
     { label: 'Bueno', value: 'Bueno' },
 ];
 
-const form = reactive({
-    category_id: '',
-    name: '',
-    producer: '',
-    description: '',
-    image: null,
-    price: '',
-    wine_type: 'Tinto',
-    grape: '',
-    country: 'Francia',
-    region: '',
-    appellation: '',
-    vintage_year: '',
-    volume_ml: 750,
-    alcohol_percentage: 12,
-    stock: 0,
-    condition: 'Excelente',
-    rating_source: '',
-    rating_score: '',
-    is_featured: false,
-});
-
 watch(
     () => props.product,
     (product) => {
-        if (!product) return;
+        if (!product) {
+            return;
+        }
 
         Object.assign(form, {
-            category_id: product.category_id || '',
-            name: product.name || '',
-            producer: product.producer || '',
-            description: product.description || '',
-            image: null,
-            price: product.price || '',
-            wine_type: product.wine_type || 'Tinto',
-            grape: product.grape || '',
-            country: product.country || 'Francia',
-            region: product.region || '',
+            category_id: product.category_id,
+            name: product.name,
+            producer: product.producer,
+            description: product.description,
+            price: Number(product.price),
+            wine_type: product.wine_type,
+            grape: product.grape,
+            country: product.country,
+            region: product.region,
             appellation: product.appellation || '',
-            vintage_year: product.vintage_year || '',
-            volume_ml: product.volume_ml || 750,
-            alcohol_percentage: product.alcohol_percentage || 12,
-            stock: product.stock || 0,
-            condition: product.condition || 'Excelente',
+            vintage_year: product.vintage_year,
+            volume_ml: product.volume_ml,
+            alcohol_percentage: Number(product.alcohol_percentage),
+            stock: product.stock,
+            condition: product.condition,
             rating_source: product.rating_source || '',
-            rating_score: product.rating_score || '',
-            is_featured: !!product.is_featured,
+            rating_score: product.rating_score !== null ? Number(product.rating_score) : null,
+            is_featured: Boolean(product.is_featured),
         });
     },
     { immediate: true }
 );
 
-function selectImage(event) {
-    const files = event.files || [];
-    form.image = files[0] || null;
+function onImageSelect(event) {
+    selectedImage.value = event.files?.[0] || null;
 }
 
-function submit() {
+function submitForm() {
     errors.value = [];
 
-    const data = new FormData();
+    const formData = new FormData();
 
     Object.entries(form).forEach(([key, value]) => {
-        if (key === 'image') {
-            if (value) data.append(key, value);
-            return;
-        }
-
         if (value === null || value === undefined) {
-            data.append(key, '');
+            formData.append(key, '');
             return;
         }
 
-        if (key === 'is_featured') {
-            data.append(key, value ? '1' : '0');
+        if (typeof value === 'boolean') {
+            formData.append(key, value ? '1' : '0');
             return;
         }
 
-        data.append(key, value);
+        formData.append(key, value);
     });
 
-    emit('submit', data, errors);
+    if (selectedImage.value) {
+        formData.append('image', selectedImage.value);
+    }
+
+    emit('submit', formData, errors);
 }
 </script>
